@@ -194,6 +194,7 @@ struct descriptors{
 class BLE112{
   public:
     BLE112(uint32_t baudrate,uint8_t gpio);
+    BLE112(HardwareSerial* serial,uint32_t baudrate,uint8_t gpio);
     bool initModule();
     void hardwareReset();
     uint8_t softwareReset();
@@ -281,6 +282,37 @@ class BLE112{
     void checkEvents();
     void parseError(uint16_t error);
 
+    struct Module module{
+      0,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+    };
+
+    struct Scan scan;
+
+    struct services service[MAX_SERVICES];
+    struct characteristics char_[MAX_CHARACTERISTICS];
+    struct descriptors desc_[MAX_DESCRIPTORS];
+
+    HardwareSerial *ble;
+    uint32_t baudrate = 0;
+
+    uint8_t command[MAX_PACKET_SIZE+HEADER_SIZE];
+    uint8_t response[MAX_PACKET_SIZE+HEADER_SIZE];
+    uint8_t response_size = 0;
+
+    uint8_t inc = 0;
+    uint8_t gpio_hw_reset = -1;
+    packet msg;
+    uint16_t connection = 0;
+    uint8_t i = 0;
+
+    uint8_t s_index = 0;
+    uint8_t c_index = 0;
 };
 
 
